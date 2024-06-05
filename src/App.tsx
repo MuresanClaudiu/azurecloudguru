@@ -48,7 +48,7 @@ function App(): JSX.Element {
                 <h2>Simulated Car Models:</h2>
                 <ul>
                   {posts.map(post => (
-                      <li key={post.id}>{post.title}</li> // Simulating the model names as post titles
+                      <li key={post.id}>{post.title}</li>
                   ))}
                 </ul>
               </div>
