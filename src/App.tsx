@@ -1,25 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
-function App() {
+interface CarQuery {
+  fuelType: string;
+  price: number;
+  year: number;
+  color: string;
+}
+
+interface CarPost {
+  id: number;
+  title: string;
+  body: string;
+}
+
+function App(): JSX.Element {
+  const [query, setQuery] = useState<CarQuery>({ fuelType: '', price: 0, year: 0, color: '' });
+  const [posts, setPosts] = useState<CarPost[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery({ ...query, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    const data: CarPost[] = await response.json();
+    setPosts(data.slice(0, 5)); // Fetch the first 5 posts for demonstration
+    setLoading(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+        <header className="App-header">
+          <h1>Car Model Finder</h1>
+          <form onSubmit={handleSubmit}>
+            <input type="text" name="fuelType" placeholder="Fuel Type" onChange={handleChange} />
+            <input type="number" name="price" placeholder="Price" onChange={handleChange} />
+            <input type="number" name="year" placeholder="Year" onChange={handleChange} />
+            <input type="text" name="color" placeholder="Color" onChange={handleChange} />
+            <button type="submit">Find Models</button>
+          </form>
+          {loading ? <p>Loading...</p> : (
+              <div>
+                <h2>Simulated Car Models:</h2>
+                <ul>
+                  {posts.map(post => (
+                      <li key={post.id}>{post.title}</li> // Simulating the model names as post titles
+                  ))}
+                </ul>
+              </div>
+          )}
+        </header>
+      </div>
   );
 }
 
