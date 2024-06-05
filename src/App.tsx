@@ -28,7 +28,7 @@ function App(): JSX.Element {
     setLoading(true);
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
     const data: CarPost[] = await response.json();
-    setPosts(data.slice(0, 5)); // Fetch the first 5 posts for demonstration
+    setPosts(data.slice(0, 5)); // Fetch the first 5 posts for demonstratio
     setLoading(false);
   };
 
